@@ -1,29 +1,14 @@
-
-{/*
-body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f8f9fa;
-        }
-        .not-found-container {
-            text-align: center;
-        }
-        .not-found-container h1 {
-            font-size: 4rem;
-            color: #dc3545;
-        }
-        .not-found-container p {
-            font-size: 1.5rem;
-            color: #6c757d;
-        }
-        .not-found-container a {
-            font-size: 1.2rem;
-        }
-*/}
+import { useEffect } from "react"
 
 export default function Notfound() {
+  useEffect(() => {
+    document.body.classList.add('error');
+
+    return () => {
+      document.body.classList.remove('error');
+    };
+  }, []);
+
   return (
     <div class="not-found-container">
       <h1>404</h1>
