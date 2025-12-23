@@ -6,6 +6,7 @@ export function validateName(name) {
     if (name[0] !== name[0].toUpperCase()) return false;
     return true;
 }
+
 export function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -29,4 +30,24 @@ export function validatePassword(password) {
 
 export function validateConfirmPassword(password, confirmPassword) {
     return password === confirmPassword;
+}
+
+
+export function validateNameBook(title) {
+    if (typeof title !== 'string') return false;
+    if (title.trim() === '') return false;
+    if (title.length > 64) return false;
+    return true;
+}
+
+export function validateAuthorBook(author) {
+    if (typeof author !== 'string') return false;
+    if (author.trim() === '') return false;
+    return true;
+}
+
+export function validateDescBook(desc) {
+    if (typeof desc !== 'string') return false;
+    if (desc.trim() === '') return false;
+    return true;
 }
