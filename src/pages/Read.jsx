@@ -1,3 +1,5 @@
+import SettingsFrom from "../components/SettingsFrom";
+
 export default function  Read() {
   return (
     <div className="container mt-5">
@@ -8,7 +10,7 @@ export default function  Read() {
       </div>
       <div className="row">
         <div className="col-md-12">
-          <form className="mb-3">
+          {/* <form className="mb-3">
             <div className="row">
               <div className="col-md-3">
                 <label for="fontFamily" className="form-label">Шрифт</label>
@@ -50,7 +52,8 @@ export default function  Read() {
                 </select>
               </div>
             </div>
-          </form>
+          </form> */}
+          <SettingsFrom />
         </div>
       </div>
       <div className="row">
