@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Index from './pages/Index.jsx';
+import Login from './pages/Login.jsx';
 import Admin from './pages/Admin.jsx';
 import Catalog from './pages/Catalog.jsx';
 import Denied from './pages/Denied.jsx';
@@ -13,7 +13,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Index />} />
+        <Route path='/login' element={<Login />} />
         <Route path='/admin' element={<Admin />} />
         <Route path='/catalog' element={<Catalog />} />
         <Route path='/denied' element={<Denied />} />
@@ -28,3 +28,4 @@ function App() {
 
 export default App
 // Наведение базовой строктуры 20 минут
+// Добавление зпросов всех 50 минут 

@@ -1,4 +1,4 @@
-export default function  Index() {
+export default function Login() {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
