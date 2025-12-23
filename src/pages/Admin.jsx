@@ -9,7 +9,6 @@ export default function Admin () {
           </div>
         </div>
 
-
         <div className="row mt-4">
           <div className="col-md-12">
             <h3>Мои книги</h3>
