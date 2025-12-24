@@ -1,6 +1,5 @@
 export default function SettingsFrom () {
     return (
-
         <form className="mb-3">
             <div className="row">
                 <div className="col-md-3">
