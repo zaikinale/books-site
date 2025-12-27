@@ -1,4 +1,4 @@
-const BASE_URL = 'https://reader-api.pasdel.ru/api/'
+const BASE_URL = 'https://reader-api.pasdel.ru/api'
 
 const getAuthHead = () => {
   const token = localStorage.getItem('token');
@@ -20,7 +20,7 @@ export const BooksApi = {
 
   getBooksAll: async () => {
     const res = await fetch(`${BASE_URL}/books`, {
-      headers: getBaseHead,
+      headers: getBaseHead(),
     })
 
     if (!res.ok) {
@@ -33,7 +33,7 @@ export const BooksApi = {
 
   getBooksAllUser: async (count, page) => {
     const res = await fetch(`${BASE_URL}/books`, {
-      headers: getBaseHead, 
+      headers: getBaseHead(), 
       body: JSON.stringify({count, page})
     })
 
@@ -47,7 +47,7 @@ export const BooksApi = {
 
   getBooksById: async (id) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
-      headers: getBaseHead,
+      headers: getBaseHead(),
     })
 
     if (!res.ok) {
@@ -63,7 +63,7 @@ export const BooksApi = {
 
   getBooksSearch: async (value) => {
     const res = await fetch(`${BASE_URL}/books?search=${value}`, {
-      headers: getBaseHead,
+      headers: getBaseHead(),
     })
 
     if (!res.ok) {
@@ -76,7 +76,7 @@ export const BooksApi = {
 
   getBooksAuthor: async (value) => {
     const res = await fetch(`${BASE_URL}/books?author=${value}`, {
-      headers: getBaseHead,
+      headers: getBaseHead(),
     })
 
     if (!res.ok) {
@@ -224,7 +224,7 @@ export const BooksApi = {
 
   getBooksAdmin: async () => {
     const res = await fetch(`${BASE_URL}/books`, {
-      headers: getBaseHead,
+      headers: getBaseHead(),
     })
 
     if (!res.ok) {

@@ -1,4 +1,4 @@
-const BASE_URL = 'https://reader-api.pasdel.ru/api/'
+const BASE_URL = 'https://reader-api.pasdel.ru/api'
 
 const getBaseHead = () => {
   return {
@@ -10,7 +10,7 @@ export const AuthApi = {
   login: async (email, password) => {
     const res = await fetch(`${BASE_URL}/login`, {
       method: "POST",
-      headers: getBaseHead,
+      headers: getBaseHead(),
       body: JSON.stringify({ email, password })
     }) 
       
@@ -25,7 +25,7 @@ export const AuthApi = {
   registration: async (name, email, age, password) => {
     const res = await fetch(`${BASE_URL}/registration`, {
       method: "POST",
-      headers: getBaseHead,
+      headers: getBaseHead(),
       body: JSON.stringify({ name, email, age, password })
     })
 
@@ -39,7 +39,7 @@ export const AuthApi = {
 
   logout: async () => {
     const res = await fetch(`${BASE_URL}/logout`, {
-      headers: getBaseHead,
+      headers: getBaseHead(),
     })
 
     if (!res.ok) {
