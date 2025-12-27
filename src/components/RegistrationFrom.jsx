@@ -19,7 +19,6 @@ export default function RegistrationForm () {
       }
       console.log('Отправленные данные:', formData);
   };
-    
 
     return (
         <form id="Form" onSubmit={handleSubmit}>
