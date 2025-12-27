@@ -3,17 +3,17 @@ import { create } from 'zustand';
 export const useUserStore = create((set) => ({
     name: '',
     email: '',
-    password: '',
+    role: '',
 
     setName: (name) => set({ name }),
     setEmail: (email) => set({ email }),
-    setPassword: (password) => set({ password }),
+    setRole: (role) => set({ role }),
 
-    reset: () => set({ name: '', email: '', password: '' }),
+    reset: () => set({ name: '', email: '', role: '' }),
 
     setUser: (userData) => set({
         name: userData.name || '',
         email: userData.email || '',
-        password: userData.password || '',
+        role: userData.role || '',
     }),
 }));

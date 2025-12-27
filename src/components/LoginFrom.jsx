@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AuthApi } from '../services/useAuthApi'
 import { validateEmail, validatePassword } from "../utils/validate";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from '../store/ProfileStore'
 
 export default function LoginForm() {
     const navigate = useNavigate();
@@ -39,6 +40,10 @@ export default function LoginForm() {
         // console.log('Отправленные данные:', formData);
         const resp = await AuthApi.login(formData.email, formData.password)
         if (resp.data.code < 300 && resp.data.code > 199) {
+            localStorage.setItem('token', resp.data.token)
+            useUserStore.setName(resp.data.user.name)
+            useUserStore.setName(resp.data.user.email)
+            useUserStore.setName(resp.data.user.role)
             navigate('/profile')
         } else {
             throw new Error(resp.message)
