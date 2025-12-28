@@ -9,7 +9,7 @@ export default function LoginForm() {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [errors, setErrors] = useState({});
 
-    const handleChange = (e) => {
+    async function handleChange (e) {
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
@@ -21,7 +21,7 @@ export default function LoginForm() {
         }
     };
 
-    const handleSubmit = async (e) => {
+    async function handleSubmit (e) {
         e.preventDefault();
 
         const emailError = validateEmail(formData.email);
@@ -41,9 +41,11 @@ export default function LoginForm() {
         const resp = await AuthApi.login(formData.email, formData.password)
         if (resp.data.code < 300 && resp.data.code > 199) {
             localStorage.setItem('token', resp.data.token)
-            useUserStore.setName(resp.data.user.name)
-            useUserStore.setName(resp.data.user.email)
-            useUserStore.setName(resp.data.user.role)
+            useUserStore.setState({
+                name: resp.data.user.name,
+                email: resp.data.user.email,
+                role: resp.data.user.role
+            });
             navigate('/profile')
         } else {
             throw new Error(resp.message)
