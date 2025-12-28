@@ -14,6 +14,14 @@ const getBaseHead = () => {
   }
 }
 
+const getAuthHeadFile = () => {
+  const token = localStorage.getItem('token');
+  return {
+    'Content-Type': 'multipart/form-data',
+    'Authorization': `Bearer ${token}`
+  }
+}
+
 export const BooksApi = {
 
   // Получить книги/группу книг
@@ -25,7 +33,7 @@ export const BooksApi = {
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get book all failed: ", error);
     }
 
     return res.json();
@@ -39,7 +47,7 @@ export const BooksApi = {
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get books all user failed: ", error);
     }
 
     return res.json();
@@ -52,7 +60,7 @@ export const BooksApi = {
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get book by id failed: ", error);
     }
 
     return res.json();
@@ -68,7 +76,7 @@ export const BooksApi = {
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get book search failed: ", error);
     }
 
     return res.json();
@@ -81,7 +89,7 @@ export const BooksApi = {
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get books author failed: ", error);
     }
 
     return res.json();
@@ -92,14 +100,13 @@ export const BooksApi = {
   uploadBook: async (formData) => {
     const res = await fetch(`${BASE_URL}/books/upload`, {
       method: "POST",
-      headers: getAuthHead,
+      headers: getAuthHeadFile(),
       body: JSON.stringify(formData)
-
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Upload books failed: ", error);
     }
 
     return res.json();
@@ -107,13 +114,12 @@ export const BooksApi = {
 
   getBookUser: async () => {
     const res = await fetch(`${BASE_URL}/books`, {
-      headers: getAuthHead,
-
+      headers: getAuthHead(),
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Book user failed: ", error);
     }
 
     return res.json();
@@ -121,13 +127,13 @@ export const BooksApi = {
 
   getInfoBookUser: async (id) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
-      headers: getAuthHead,
+      headers: getAuthHead(),
 
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get info book user failed: ", error);
     }
 
     return res.json();
@@ -136,13 +142,13 @@ export const BooksApi = {
   getDeleteBookUser: async (id) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
       method: "DELETE",
-      headers: getAuthHead,
+      headers: getAuthHead(),
 
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Delete book user failed: ", error);
     }
 
     return res.json();
@@ -151,14 +157,14 @@ export const BooksApi = {
   getChangeBookUser: async (id, title, description, author) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
       method: "PATCH",
-      headers: getAuthHead,
+      headers: getAuthHead(),
       body: JSON.stringify({ title, description, author })
 
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Change book user failed: ", error);
     }
 
     return res.json();
@@ -166,12 +172,12 @@ export const BooksApi = {
 
   getProgressBookUser: async (id) => {
     const res = await fetch(`${BASE_URL}/books/${id}/progress`, {
-      headers: getAuthHead,
+      headers: getAuthHead(),
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get progress book user failed: ", error);
     }
 
     return res.json();
@@ -179,12 +185,12 @@ export const BooksApi = {
 
   getProgressUser: async () => {
     const res = await fetch(`${BASE_URL}/books/progress`, {
-      headers: getAuthHead,
+      headers: getAuthHead(),
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get progress user failed: ", error);
     }
 
     return res.json();
@@ -195,13 +201,13 @@ export const BooksApi = {
   saveSettingsBookUser: async (formData) => {
     const res = await fetch(`${BASE_URL}/user/settings`, {
       method: "POST",
-      headers: getAuthHead,
+      headers: getAuthHead(),
       body: JSON.stringify({ formData })
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Save settings book user failed: ", error);
     }
 
     return res.json();
@@ -209,12 +215,12 @@ export const BooksApi = {
 
   getSettingsBookUser: async () => {
     const res = await fetch(`${BASE_URL}/user/settings`, {
-      headers: getAuthHead
+      headers: getAuthHead()
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get settings book user failed: ", error);
     }
 
     return res.json();
@@ -229,7 +235,7 @@ export const BooksApi = {
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Get books admin failed: ", error);
     }
 
     return res.json();
@@ -239,14 +245,14 @@ export const BooksApi = {
   getChangeBookAdmin: async (id, isPublic) => {
     const res = await fetch(`${BASE_URL}/books/${id}/change-visibility`, {
       method: "PUT",
-      headers: getAuthHead,
+      headers: getAuthHead(),
       body: JSON.stringify({ isPublic })
 
     })
 
     if (!res.ok) {
       const error = await res.json();
-      throw new Error("Login failed: ", error);
+      throw new Error("Change book admin failed: ", error);
     }
 
     return res.json();

@@ -1,30 +1,103 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import BookCardUser from "../components/BookCardUser";
-import { useUserStore } from '../store/ProfileStore'
+import { useUserStore } from '../store/ProfileStore';
+import { BooksApi } from "../services/useBooksApi"; 
+
 export default function Profile() {
   const { name, email } = useUserStore();
-  const [isBookFormAct, setBookFromAct] = useState(false);
+  const [bookForms, setBookForms] = useState([]);
+  const [userBooks, setUserBooks] = useState([]);
 
-  function formId() {
-    let id = 0;
-    return function() {
-      id += 1;
-      return id;
+  const nextIdRef = useRef(1);
+
+  useEffect(() => {
+    const fetchUserBooks = async () => {
+      try {
+        const resp = await BooksApi.getBookUser();
+        if (resp.data?.code >= 200 && resp.data?.code < 300) {
+          setUserBooks(resp.data.books || []);
+        } else {
+          console.error('Ошибка загрузки книг:', resp.message);
+          setUserBooks([]);
+        }
+      } catch (error) {
+        console.error('Сетевая ошибка:', error);
+        setUserBooks([]);
+      } 
     };
-  }
+
+    fetchUserBooks();
+  }, []);
+
+
+  function addBookForm () {
+    const newId = nextIdRef.current;
+    nextIdRef.current += 1; 
+    const newBook = {
+      id: newId,
+      title: '',
+      author: '',
+      description: '',
+      file: null
+    };
+    setBookForms(prev => [...prev, newBook]);
+  };
+
+  const removeBookForm = (idToRemove) => {
+    setBookForms(prev => 
+      prev.filter(book => book.id !== idToRemove)
+    );
+  };
+
+  const handleInputChange = (id, field, value) => {
+    setBookForms(prev =>
+      prev.map(book =>
+        book.id === id ? { ...book, [field]: value } : book
+      )
+    );
+  };
+
+  const handleFileChange = (id, file) => {
+    setBookForms(prev =>
+      prev.map(book =>
+        book.id === id ? { ...book, file } : book
+      )
+    );
+  };
+
+  const uploadBooks = async () => {
+    try {
+      const uploadPromises = bookForms.map(async (book) => {
+        const { title, author, description, file } = book;
   
-  function addBookForm() {
-    setBookFromAct(!isBookFormAct)
-    // console.log('Click ', isBookFormAct)
-  }
-
-  function uploadBooks() {
-    console.log('Click ', name, email)
-  }
-
-  function removeBookForm() {
-    return 
-  }
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('author', author);
+        formData.append('description', description);
+        
+        // if (file) {
+          formData.append('file', file);
+        // }
+  
+        const resp = await BooksApi.uploadBook(formData);
+        console.log('Запрос на сервер:', resp.data)
+  
+        if (resp.data?.code >= 200 && resp.data?.code < 300) {
+          return resp.data.book;
+        } else {
+          console.log('Файл:', file);
+          throw new Error(resp.message || 'Upload failed');
+        }
+      });
+  
+      const newBooks = await Promise.all(uploadPromises);
+      setUserBooks(prev => [...prev, ...newBooks]);
+      setBookForms([]);
+      console.log('Все книги успешно загружены');
+    } catch (error) {
+      console.error('Ошибка при загрузке книг:', error);
+    }
+  };
 
 
   return (
@@ -51,8 +124,15 @@ export default function Profile() {
         <div className="col-md-12">
           <h3>Мои книги</h3>
           <div id="user-books">
-            <BookCardUser/>
-            <BookCardUser/>
+            {userBooks.map((book) => (
+              <BookCardUser
+                key={book.id}
+                id={book.id}
+                title={book.title}
+                author={book.author}
+                description={book.description}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -61,54 +141,76 @@ export default function Profile() {
         <div className="col-md-12">
           <h3>Добавить книги</h3>
           <div id="add-books-form">
-            {isBookFormAct !== false && (
-              <div className="add-book-form" id={`form-${formId}`}>
+            {bookForms.map((book) => (
+              <div key={book.id} className="add-book-form mb-4 p-3 border rounded">
                 <div className="mb-3">
-                  <label for={`title-${formId}`} className="form-label">Название книги</label>
-                  <input type="text" className="form-control" id={`title-${formId}`} />
+                  <label htmlFor={`title-${book.id}`} className="form-label">Название книги</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id={`title-${book.id}`}
+                    value={book.title}
+                    onChange={(e) => handleInputChange(book.id, 'title', e.target.value)}
+                  />
                 </div>
                 <div className="mb-3">
-                  <label for={`author-${formId}`} className="form-label">Автор</label>
-                  <input type="text" className="form-control" id={`author-${formId}`} />
-                </div><div className="mb-3">
-                  <label for={`description-${formId}`} className="form-label">Описание</label>
-                  <textarea className="form-control" id={`description-${formId}`}></textarea>
-                </div><div className="mb-3">
-                  <label for={`file-${formId}`} className="form-label">Загрузить файл</label>
-                  <input type="file" className="form-control" id={`file-${formId}`} />
+                  <label htmlFor={`author-${book.id}`} className="form-label">Автор</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id={`author-${book.id}`}
+                    value={book.author}
+                    onChange={(e) => handleInputChange(book.id, 'author', e.target.value)}
+                  />
                 </div>
-                <button className="btn btn-danger btn-sm" onClick={removeBookForm(`${formId}`)}>Удалить эту книгу</button>
+                <div className="mb-3">
+                  <label htmlFor={`description-${book.id}`} className="form-label">Описание</label>
+                  <textarea
+                    className="form-control"
+                    id={`description-${book.id}`}
+                    value={book.description}
+                    onChange={(e) => handleInputChange(book.id, 'description', e.target.value)}
+                  ></textarea>
+                </div>
+                <div className="mb-3">
+                  <label htmlFor={`file-${book.id}`} className="form-label">Загрузить файл</label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id={`file-${book.id}`}
+                    onChange={(e) => handleFileChange(book.id, e.target.files[0])}
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-danger btn-sm"
+                  onClick={() => removeBookForm(book.id)}
+                >
+                  Удалить эту книгу
+                </button>
               </div>
-            )
-          }
+            ))}
           </div>
-          <button className="btn btn-secondary mt-2" onClick={addBookForm}>Добавить еще одну книгу</button>
-          <button className="btn btn-primary mt-2" onClick={uploadBooks}>Загрузить все книги</button>
+
+          <button
+            type="button"
+            className="btn btn-secondary mt-2"
+            onClick={addBookForm}
+          >
+            Добавить ещё одну книгу
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-primary mt-2 ms-2"
+            onClick={uploadBooks}
+          >
+            Загрузить все книги
+          </button>
+        
           <div id="error-messages" className="text-danger mt-2"></div>
         </div>
       </div>
-
-      {/* <div>
-        <div className="add-book-form" id="form-${formId}">
-          <div className="mb-3">
-            <label for="title-${formId}" className="form-label">Название книги</label>
-            <input type="text" className="form-control" id="title-${formId}" />
-          </div>
-          <div className="mb-3">
-            <label for="author-${formId}" className="form-label">Автор</label>
-            <input type="text" className="form-control" id="author-${formId}" />
-          </div>
-          <div className="mb-3">
-            <label for="description-${formId}" className="form-label">Описание</label>
-            <textarea className="form-control" id="description-${formId}"></textarea>
-          </div>
-          <div className="mb-3">
-            <label for="file-${formId}" className="form-label">Загрузить файл</label>
-            <input type="file" className="form-control" id="file-${formId}" />
-          </div>
-          <button className="btn btn-danger btn-sm" onclick="removeBookForm('${formId}')">Удалить эту книгу</button>
-        </div>
-      </div> */}
     </div>
-  )
+  );
 }
