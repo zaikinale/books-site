@@ -1,18 +1,15 @@
 import { useState } from "react"
+import {BooksApi} from '../services/useBooksApi'
 
-export default function BookCardUser ({ id, title, author, description }) {
+export default function BookCardUser ({ id, title, author, description, deleteBook }) {
     const [isEdit, setEdit] = useState(false);
     function editBook() {
         setEdit(!isEdit) 
-    }
-    function deleteBook() {
-        return 
     }
 
     return (
         <div className="card book-card">
             <div className="card-body">
-
                 {
                     isEdit ? (
                         <>
@@ -36,7 +33,7 @@ export default function BookCardUser ({ id, title, author, description }) {
                 <h5 className="card-subtitle mb-2 text-muted">Описание</h5>
                 <input className="form-control" type="text" id="book-description-${formId}" /> */}
                 <button className="btn btn-warning btn-sm" onClick={editBook}>Редактировать</button>
-                <button className="btn btn-danger btn-sm" onClick={deleteBook}>Удалить</button>
+                <button className="btn btn-danger btn-sm" onClick={()=> deleteBook(id)}>Удалить</button>
             </div>
         </div>
     )

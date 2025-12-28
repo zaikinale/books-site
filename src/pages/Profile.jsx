@@ -29,6 +29,15 @@ export default function Profile() {
     fetchUserBooks();
   }, []);
 
+  async function deleteBook (bookId) {
+    try {
+      await BooksApi.deleteBookUser(bookId);
+      setUserBooks(prev => prev.filter(book => book.id !== bookId));
+      console.log('Книга удалена');
+    } catch (error) {
+      console.error('Ошибка при удалении книги:', error);
+    }
+  }
 
   function addBookForm () {
     const newId = nextIdRef.current;
@@ -131,6 +140,7 @@ export default function Profile() {
                 title={book.title}
                 author={book.author}
                 description={book.description}
+                deleteBook={deleteBook}
               />
             ))}
           </div>

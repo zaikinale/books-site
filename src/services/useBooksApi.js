@@ -13,13 +13,13 @@ const getBaseHead = () => {
   }
 }
 
-const getAuthHeadFile = () => {
-  const token = localStorage.getItem('token');
-  return {
-    'Content-Type': 'multipart/form-data',
-    'Authorization': `Bearer ${token}`
-  }
-}
+// const getAuthHeadFile = () => {
+//   const token = localStorage.getItem('token');
+//   return {
+//     'Content-Type': 'multipart/form-data',
+//     'Authorization': `Bearer ${token}`
+//   }
+// }
 
 export const BooksApi = {
 
@@ -119,7 +119,7 @@ export const BooksApi = {
       },
       body: formData
     });
-  ь
+  
     const text = await res.text();
     try {
       const json = JSON.parse(text);
@@ -127,7 +127,7 @@ export const BooksApi = {
         throw new Error(json.message || 'Upload failed');
       }
       return json;
-    } catch (e) {
+    } catch {
       console.error('Server error (raw):', text);
       throw new Error('Invalid server response');
     }
@@ -160,11 +160,10 @@ export const BooksApi = {
     return res.json();
   },
 
-  getDeleteBookUser: async (id) => {
+  deleteBookUser: async (id) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
       method: "DELETE",
       headers: getAuthHead(),
-
     })
 
     if (!res.ok) {
