@@ -1,9 +1,8 @@
-const BASE_URL = 'https://reader-api.pasdel.ru/api'
+const BASE_URL = '/api'
 
 const getAuthHead = () => {
   const token = localStorage.getItem('token');
   return {
-    'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`
   }
 }
@@ -97,19 +96,41 @@ export const BooksApi = {
 
   // Получить/добавить книгу авторизованного пользователя
 
+  // uploadBook: async (formData) => {
+  //   const res = await fetch(`${BASE_URL}/books/upload`, {
+  //     method: "POST",
+  //     headers: getAuthHeadFile(),
+  //     body: JSON.stringify(formData)
+  //   })
+
+  //   if (!res.ok) {
+  //     const error = await res.json();
+  //     throw new Error("Upload books failed: ", error);
+  //   }
+
+  //   return res.json();
+  // },
   uploadBook: async (formData) => {
-    const res = await fetch(`${BASE_URL}/books/upload`, {
-      method: "POST",
-      headers: getAuthHeadFile(),
-      body: JSON.stringify(formData)
-    })
-
-    if (!res.ok) {
-      const error = await res.json();
-      throw new Error("Upload books failed: ", error);
+    const token = localStorage.getItem('token');
+    const res = await fetch('/api/books/upload', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
+    });
+  ь
+    const text = await res.text();
+    try {
+      const json = JSON.parse(text);
+      if (!res.ok) {
+        throw new Error(json.message || 'Upload failed');
+      }
+      return json;
+    } catch (e) {
+      console.error('Server error (raw):', text);
+      throw new Error('Invalid server response');
     }
-
-    return res.json();
   },
 
   getBookUser: async () => {

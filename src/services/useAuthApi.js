@@ -1,4 +1,4 @@
-const BASE_URL = 'https://reader-api.pasdel.ru/api'
+const BASE_URL = '/api'
 
 const getBaseHead = () => {
   return {
