@@ -10,10 +10,10 @@ export default function Denied() {
   }, []);
 
   return (
-    <div class="denied-container">
+    <div className="denied-container">
       <h1>403</h1>
       <p>Доступ запрещен.</p>
-      <a href="index.html" class="btn btn-primary">Вернуться на главную</a>
+      <a href="index.html" className="btn btn-primary">Вернуться на главную</a>
     </div>
   )
 }
