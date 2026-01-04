@@ -49,6 +49,12 @@ export default function Profile() {
             console.error('Ошибка при удалении книги:', error);
         }
     }
+    
+    async function handleBookUpdated(bookId, updatedBook) {
+      setUserBooks(prev =>
+        prev.map(book => (book.id === bookId ? updatedBook : book))
+      );
+    }
 
     function addBookForm() {
         const newId = nextIdRef.current++;
@@ -137,6 +143,7 @@ export default function Profile() {
                                     author={book.author}
                                     description={book.description}
                                     deleteBook={deleteBook}
+                                    onBookUpdated={handleBookUpdated}
                                 />
                             ))
                         ) : (

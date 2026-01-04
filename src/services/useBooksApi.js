@@ -174,7 +174,7 @@ export const BooksApi = {
     return res.json();
   },
 
-  getChangeBookUser: async (id, title, description, author) => {
+  ChangeBookUser: async (id, title, description, author) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
       method: "PATCH",
       headers: getAuthHead(),

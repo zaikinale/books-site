@@ -1,40 +1,93 @@
-import { useState } from "react"
-import {BooksApi} from '../services/useBooksApi'
+import { useState } from "react";
+import { BooksApi } from '../services/useBooksApi';
 
-export default function BookCardUser ({ id, title, author, description, deleteBook }) {
+export default function BookCardUser({ id, title, author, description, deleteBook, onBookUpdated }) {
     const [isEdit, setEdit] = useState(false);
-    function editBook() {
-        setEdit(!isEdit) 
-    }
+    
+    const [formData, setFormData] = useState({
+        title,
+        author,
+        description
+    });
+
+    const handleInputChange = (field, value) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
+    const saveChanges = async () => {
+        try {
+            await BooksApi.ChangeBookUser(id, formData.title, formData.description, formData.author);
+        
+            onBookUpdated(id, {
+                id,
+                title: formData.title,
+                author: formData.author,
+                description: formData.description,
+            });
+        
+            setEdit(false);
+        } catch (error) {
+            console.error('Ошибка сохранения:', error);
+        }
+    };
+
+    const cancelEdit = () => {
+        setFormData({ title, author, description });
+        setEdit(false);
+    };
 
     return (
         <div className="card book-card">
             <div className="card-body">
-                {
-                    isEdit ? (
-                        <>
-                        <input className="form-control" type="text" id={`book-title-${id}`} placeholder={title} />
-                        <input className="form-control" type="text" id={`book-author-${id}`} placeholder={author}  />
-                        <input className="form-control" type="text" id={`book-description-${id}`} placeholder={description} />
+                {isEdit ? (
+                    <>
+                        <input
+                            className="form-control mb-2"
+                            type="text"
+                            value={formData.title}
+                            onChange={(e) => handleInputChange('title', e.target.value)}
+                        />
+                        <input
+                            className="form-control mb-2"
+                            type="text"
+                            value={formData.author}
+                            onChange={(e) => handleInputChange('author', e.target.value)}
+                        />
+                        <input
+                            className="form-control mb-2"
+                            type="text"
+                            value={formData.description}
+                            onChange={(e) => handleInputChange('description', e.target.value)}
+                        />
                     </>
                 ) : (
                     <>
                         <h5 className="card-title">{title}</h5>
-                        <h5 className="card-subtitle mb-2 text-muted">{author}</h5>
-                        <h5 className="card-subtitle mb-2 text-muted">{description}</h5>
+                        <h6 className="card-subtitle mb-2 text-muted">{author}</h6>
+                        <p className="card-text">{description}</p>
                     </>
-                )
-            }
-{/* 
-                <h5 className="card-title">Название книги</h5>
-                <input className="form-control" type="text" id="book-title-${formId}" />
-                <h5 className="card-subtitle mb-2 text-muted">Автор</h5>
-                <input className="form-control" type="text" id="book-author-${formId}" />
-                <h5 className="card-subtitle mb-2 text-muted">Описание</h5>
-                <input className="form-control" type="text" id="book-description-${formId}" /> */}
-                <button className="btn btn-warning btn-sm" onClick={editBook}>Редактировать</button>
-                <button className="btn btn-danger btn-sm" onClick={()=> deleteBook(id)}>Удалить</button>
+                )}
+
+                {isEdit ? (
+                    <>
+                        <button className="btn btn-success btn-sm me-2" onClick={saveChanges}>
+                            Сохранить
+                        </button>
+                        <button className="btn btn-secondary btn-sm" onClick={cancelEdit}>
+                            Отменить
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button className="btn btn-warning btn-sm me-2" onClick={() => setEdit(true)}>
+                            Редактировать
+                        </button>
+                        <button className="btn btn-danger btn-sm" onClick={() => deleteBook(id)}>
+                            Удалить
+                        </button>
+                    </>
+                )}
             </div>
         </div>
-    )
+    );
 }
