@@ -13,7 +13,7 @@ export default function Profile() {
     const nextIdRef = useRef(1);
 
     useEffect(() => {
-        if (role !== 'admin' || role !== 'user') {
+        if (role !== 'admin' && role !== 'user') {
             navigate('/denied');
         }
     }, [role, navigate]);
