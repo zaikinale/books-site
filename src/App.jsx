@@ -9,11 +9,10 @@ import Read from './pages/Read.jsx';
 import Registration from './pages/Registration.jsx';
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/login' element={<Login />} />
+        <Route path='/index.html' element={<Login />} />
         <Route path='/admin' element={<Admin />} />
         <Route path='/catalog' element={<Catalog />} />
         <Route path='/denied' element={<Denied />} />
