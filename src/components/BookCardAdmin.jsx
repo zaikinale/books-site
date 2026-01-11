@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { BooksApi } from '../services/useBooksApi';
 
-export default function BookCardAdmin ({ id, title, author, description, deleteBook, onBookUpdated }) {
+export default function BookCardAdmin ({ id, title, author, description, isPublic, deleteBook, onBookUpdated }) {
     const formId = id;
     const [isEdit, setEdit] = useState(false);
-    const [isAvailable, setIsAvailable] = useState(false);
+    const [isAvailable, setIsAvailable] = useState(isPublic);
 
     const [formData, setFormData] = useState({
         title,
@@ -12,8 +12,13 @@ export default function BookCardAdmin ({ id, title, author, description, deleteB
         description
     });
 
-    const toggleStatus = () => {
-        setIsAvailable(prev => !prev)
+    const toggleStatus = async () => {
+        try {
+            await BooksApi.changeBookAdmin(id, isEdit)
+            setIsAvailable(prev => !prev)
+        } catch(error) {
+            console.error('Ошибка сохранения:', error);
+        }
     };
 
     const handleInputChange = (field, value) => {
@@ -87,21 +92,10 @@ export default function BookCardAdmin ({ id, title, author, description, deleteB
                 ) : (
                     <>
                         <button className="btn btn-warning btn-sm" onclick={() => setEdit(true)}>Редактировать</button>
-                        <button className="btn btn-danger btn-sm" onclick={deleteBook}>Удалить</button>
+                        <button className="btn btn-danger btn-sm" onclick={() => deleteBook(id)}>Удалить</button>
                     </>
                 )}
                 <button className="btn btn-secondary btn-sm" onclick={toggleStatus}>Изменить статус</button>
-                {/* <h5 className="card-title">Название книги</h5>
-                <input className="form-control" type="text" id={`book-title-${formId}`} />
-                <h5 className="card-subtitle mb-2 text-muted">Автор</h5>
-                <input className="form-control" type="text" id={`book-author-${formId}`} />
-                <h5 className="card-subtitle mb-2 text-muted">Описание</h5>
-                <input className="form-control" type="text" id={`book-description-${formId}`} />
-                <h5 className="card-subtitle mb-2 text-muted">Статус</h5>
-                <p className="form-control" id={`book-status-${formId}`}>Доступно</p>
-                <button className="btn btn-warning btn-sm" onclick={editBook}>Редактировать</button>
-                <button className="btn btn-danger btn-sm" onclick={deleteBook}>Удалить</button>
-                <button className="btn btn-secondary btn-sm" onclick={toggleStatus}>Изменить статус</button> */}
             </div>
         </div>
     )

@@ -262,7 +262,7 @@ export const BooksApi = {
   },
 
 
-  getChangeBookAdmin: async (id, isPublic) => {
+  changeBookAdmin: async (id, isPublic) => {
     const res = await fetch(`${BASE_URL}/books/${id}/change-visibility`, {
       method: "PUT",
       headers: getAuthHead(),
