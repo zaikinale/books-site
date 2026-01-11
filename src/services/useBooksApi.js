@@ -179,7 +179,6 @@ export const BooksApi = {
       method: "PATCH",
       headers: getAuthHead(),
       body: JSON.stringify({ title, description, author })
-
     })
 
     if (!res.ok) {

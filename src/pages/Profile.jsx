@@ -51,9 +51,9 @@ export default function Profile() {
     }
     
     async function handleBookUpdated(bookId, updatedBook) {
-      setUserBooks(prev =>
-        prev.map(book => (book.id === bookId ? updatedBook : book))
-      );
+        setUserBooks(prev =>
+            prev.map(book => (book.id === bookId ? updatedBook : book))
+        );
     }
 
     function addBookForm() {

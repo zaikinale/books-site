@@ -1,6 +1,8 @@
 import { useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 
 export default function Denied() {
+  const navigate = useNavigate();
   useEffect(() => {
     document.body.classList.add('error');
 
@@ -9,11 +11,15 @@ export default function Denied() {
     };
   }, []);
 
+  const onMain = () => {
+    navigate('/')
+  }
+
   return (
     <div className="denied-container">
       <h1>403</h1>
       <p>Доступ запрещен.</p>
-      <a href="index.html" className="btn btn-primary">Вернуться на главную</a>
+      <a className="btn btn-primary" onClick={onMain}>Вернуться на главную</a>
     </div>
   )
 }
