@@ -38,6 +38,7 @@ export const AuthApi = {
   },
 
   logout: async () => {
+
     const res = await fetch(`${BASE_URL}/logout`, {
       headers: getBaseHead(),
     })
@@ -46,6 +47,7 @@ export const AuthApi = {
       const error = await res.json();
       throw new Error("Logout failed: ", error);
     }
+    localStorage.clear()
 
     return res.json();
   },

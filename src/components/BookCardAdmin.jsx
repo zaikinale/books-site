@@ -82,7 +82,7 @@ export default function BookCardAdmin ({ id, title, author, description, isPubli
                     </>
                 )}
                 <h5 className="card-subtitle mb-2 text-muted">Статус</h5>
-                <p className="form-control" id={`book-status-${formId}`}>{isAvailable ? "Доступно" : "Закрыто"}</p>
+                <p className="form-control" id={`book-status-${formId}`}>{isAvailable ? "Доступно" : "Недоступно"}</p>
 
                 {isEdit ? (
                     <>
