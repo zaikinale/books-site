@@ -1,6 +1,8 @@
 import { useEffect } from "react"
+import { useNavigate } from "react-router-dom";
 
 export default function Notfound() {
+  const navigate = useNavigate()
   useEffect(() => {
     document.body.classList.add('error');
 
@@ -9,11 +11,17 @@ export default function Notfound() {
     };
   }, []);
 
+
+  const onMain = () => {
+    navigate('/')
+  }
+
+
   return (
     <div class="not-found-container">
       <h1>404</h1>
       <p>Запрашиваемый контент не найден.</p>
-      <a href="index.html" class="btn btn-primary">Вернуться на главную</a>
+      <a class="btn btn-primary" onClick={onMain}>Вернуться на главную</a>
     </div>
   )
 }

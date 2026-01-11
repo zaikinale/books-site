@@ -22,6 +22,7 @@ function App() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/read' element={<Read />} />
         <Route path='/registration' element={<Registration />} />
+        <Route path='/*' element={<Notfound />} />
         {/* <Route path='/logout' element={<Logout />} /> */}
       </Routes>
     </BrowserRouter>
