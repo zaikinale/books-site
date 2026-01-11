@@ -9,6 +9,7 @@ import Read from './pages/Read.jsx';
 import Registration from './pages/Registration.jsx';
 
 
+
 function App() {
   return (
     <BrowserRouter>
@@ -21,7 +22,7 @@ function App() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/read' element={<Read />} />
         <Route path='/registration' element={<Registration />} />
-        <Route path='/logout' element={<Logout />} />
+        {/* <Route path='/logout' element={<Logout />} /> */}
       </Routes>
     </BrowserRouter>
   )

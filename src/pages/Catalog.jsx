@@ -1,6 +1,35 @@
+import { useEffect, useState } from "react";
 import BookCard from "../components/BookCard"
+import { BooksApi } from "../services/useBooksApi"
+import { useNavigate } from "react-router-dom";
 
 export default function Catalog () {
+  const navigate = useNavigate();
+  const [books, setBooks] = useState([]);
+
+  const linkPath = (id) => {
+    navigate(`/read/${id}`)
+  }
+
+    useEffect(() => {
+        const fetchUserBooks = async () => {
+            try {
+                const resp = await BooksApi.getBooksAdmin();
+                if (resp.data?.code >= 200 && resp.data?.code < 300) {
+                  setBooks(resp.data.books || []);
+                } else {
+                    console.error('Ошибка загрузки книг администратора:', resp.message);
+                    setBooks([]);
+                }
+            } catch (error) {
+                console.error('Сетевая ошибка:', error);
+                setBooks([]);
+            }
+        };
+  
+        fetchUserBooks();
+    }, []);
+
   return (
     <div className="container mt-5">
       <div className="row">
@@ -19,7 +48,21 @@ export default function Catalog () {
               <a href="book.html" className="btn btn-primary">Читать</a>
             </div>
           </div> */}
-          <BookCard />
+
+          {books.length > 0 ? (
+            books.map((book) => (
+              <BookCard
+                key={book.id}
+                id={book.id}
+                title={book.title}
+                author={book.author}
+                description={book.description}
+                link={linkPath}
+              />
+            ))
+            ) : (
+              <p>Не получилось получить данные от сервера.</p>
+            )}
         </div>
 
       </div>
