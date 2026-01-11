@@ -82,7 +82,7 @@ export default function RegistrationForm() {
         try {
             const resp = await AuthApi.registration(formData.name, formData.email, formData.age, formData.password);
             if (resp.data?.code >= 200 && resp.data?.code < 300) {
-                navigate('/login');
+                navigate('/');
             }
         } catch (err) {
             console.error('Registration error:', err);
