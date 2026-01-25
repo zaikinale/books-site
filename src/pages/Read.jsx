@@ -54,6 +54,11 @@ export default function  Read() {
     loadBook();
   }, [id, role]);
   
+  // Проверка роли
+  if (role !== 'admin' && role !== 'user') {
+    return null;
+  }
+
   return (
     <div className="container mt-5">
       <div className="row">
