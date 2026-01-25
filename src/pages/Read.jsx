@@ -1,6 +1,59 @@
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from "react-router-dom";
+import { useUserStore } from '../store/ProfileStore';
+// Импортируем компоненты формы 
 import SettingsFrom from "../components/SettingsFrom";
+// Импорт функций-запросов
+import { BooksApi } from "../services/useBooksApi";
 
 export default function  Read() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { role } = useUserStore();
+
+  // Хранилище данных о книге и файла книги
+  const [book, setBook] = useState(null); 
+  const [bookHtml, setBookHtml] = useState('');
+
+  // Проверка роли
+  useEffect(() => {
+    if (role !== 'admin' && role !== 'user') {
+      navigate('/denied');
+    }
+  }, [role, navigate]);
+
+  // Загрузка книги и её файла
+  useEffect(() => {
+    // Проверка роли
+    if (role !== 'admin' && role !== 'user' || !id) {
+      return;
+    }
+
+    const loadBook = async () => {
+      try {
+        const resp = await BooksApi.getBooksById(id);
+        if (resp.data?.code !== 200) {
+          throw new Error('Не удалось загрузить книгу: ', resp.data?.message);
+        }
+
+        const bookData = resp.data.data.book;
+        setBook(bookData);
+
+        const htmlResponse = await fetch(bookData.file_url);
+        if (!htmlResponse.ok) {
+          throw new Error(`Ошибка загрузки Файла: ${htmlResponse.status}`);
+        }
+
+        const htmlText = await htmlResponse.text();
+        setBookHtml(htmlText);
+      } catch (err) {
+        console.error('Ошибка сетевая: ', err);
+      }
+    };
+
+    loadBook();
+  }, [id, role]);
+  
   return (
     <div className="container mt-5">
       <div className="row">
@@ -58,8 +111,9 @@ export default function  Read() {
       </div>
       <div className="row">
         <div className="col-md-12">
-          <div id="book-content">
-            <h2>Глава 1</h2>
+          <div id="book-content" dangerouslySetInnerHTML={{ __html: bookHtml }}>
+
+            {/* <h2>Глава 1</h2>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
             </p>
@@ -69,7 +123,7 @@ export default function  Read() {
             <h2>Глава 2</h2>
             <p>
               Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
