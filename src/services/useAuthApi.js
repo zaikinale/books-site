@@ -7,6 +7,7 @@ const getBaseHead = () => {
 }
 
 export const AuthApi = {
+  // Функция входа в профиль
   login: async (email, password) => {
     const res = await fetch(`${BASE_URL}/login`, {
       method: "POST",
@@ -22,6 +23,7 @@ export const AuthApi = {
     return res.json();
   },
 
+  // Функция регистрации
   registration: async (name, email, age, password) => {
     const res = await fetch(`${BASE_URL}/registration`, {
       method: "POST",
@@ -37,6 +39,7 @@ export const AuthApi = {
     return res.json();
   },
 
+  // Функция выхода из профиля
   logout: async () => {
 
     const res = await fetch(`${BASE_URL}/logout`, {
@@ -51,8 +54,6 @@ export const AuthApi = {
 
     return res.json();
   },
-
-
 }
 
 

@@ -1,5 +1,6 @@
 const BASE_URL = '/api'
 
+// Вспомогательные функции заголовков
 const getAuthHead = () => {
   const token = localStorage.getItem('token');
   return {
@@ -24,8 +25,7 @@ const getBaseHead = () => {
 
 export const BooksApi = {
 
-  // Получить книги/группу книг
-
+  // Функция получения всех книг
   getBooksAll: async () => {
     const res = await fetch(`${BASE_URL}/books`, {
       headers: getBaseHead(),
@@ -39,6 +39,7 @@ export const BooksApi = {
     return res.json();
   },
 
+  // Функция получения всех книг пользователя
   getBooksAllUser: async (count, page) => {
     const res = await fetch(`${BASE_URL}/books`, {
       headers: getBaseHead(), 
@@ -53,6 +54,8 @@ export const BooksApi = {
     return res.json();
   },
 
+
+  // Функция получения книги по идентификатору
   getBooksById: async (id) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
       headers: getBaseHead(),
@@ -66,9 +69,7 @@ export const BooksApi = {
     return res.json();
   },
 
-
-  // Поиск книги
-
+  // Функиця поиска книги
   getBooksSearch: async (value) => {
     const res = await fetch(`${BASE_URL}/books?search=${value}`, {
       headers: getBaseHead(),
@@ -82,6 +83,7 @@ export const BooksApi = {
     return res.json();
   },
 
+  // Функция получения книг автора
   getBooksAuthor: async (value) => {
     const res = await fetch(`${BASE_URL}/books?author=${value}`, {
       headers: getBaseHead(),
@@ -111,6 +113,8 @@ export const BooksApi = {
 
   //   return res.json();
   // },
+
+  // Функция публикации книги пользователя
   uploadBook: async (formData) => {
     const token = localStorage.getItem('token');
     const res = await fetch('/api/books/upload', {
@@ -134,6 +138,7 @@ export const BooksApi = {
     }
   },
 
+  // Функция получения книги пользователя
   getBookUser: async () => {
     const res = await fetch(`${BASE_URL}/books`, {
       headers: getAuthHead(),
@@ -147,6 +152,7 @@ export const BooksApi = {
     return res.json();
   },
 
+  // Функция получения информации о кнге
   getInfoBookUser: async (id) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
       headers: getAuthHead(),
@@ -161,6 +167,7 @@ export const BooksApi = {
     return res.json();
   },
 
+  // Функция удаления книги
   deleteBookUser: async (id) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
       method: "DELETE",
@@ -175,6 +182,7 @@ export const BooksApi = {
     return res.json();
   },
 
+  // Функция изменения книги пользователя
   ChangeBookUser: async (id, title, description, author) => {
     const res = await fetch(`${BASE_URL}/books/${id}`, {
       method: "PATCH",
@@ -190,6 +198,7 @@ export const BooksApi = {
     return res.json();
   },
 
+  // Функция получения прогресса чтения книги пользователя
   getProgressBookUser: async (id) => {
     const res = await fetch(`${BASE_URL}/books/${id}/progress`, {
       headers: getAuthHead(),
@@ -203,6 +212,7 @@ export const BooksApi = {
     return res.json();
   },
 
+  // Функция получения прогресса пользователя
   getProgressUser: async () => {
     const res = await fetch(`${BASE_URL}/books/progress`, {
       headers: getAuthHead(),
@@ -218,6 +228,7 @@ export const BooksApi = {
 
   // Настройки пользователя
 
+  // Функция сохранения настроек книги
   saveSettingsBookUser: async (formData) => {
     const res = await fetch(`${BASE_URL}/user/settings`, {
       method: "POST",
@@ -233,6 +244,7 @@ export const BooksApi = {
     return res.json();
   },
 
+  // Функция получения настроек книги
   getSettingsBookUser: async () => {
     const res = await fetch(`${BASE_URL}/user/settings`, {
       headers: getAuthHead()
@@ -248,6 +260,7 @@ export const BooksApi = {
 
   // Администратор
 
+  // Функция получения книг администратора
   getBooksAdmin: async () => {
     const res = await fetch(`${BASE_URL}/books`, {
       headers: getBaseHead(),
@@ -261,7 +274,7 @@ export const BooksApi = {
     return res.json();
   },
 
-
+  // Функция изменение книги администратора
   changeBookAdmin: async (id, isPublic) => {
     const res = await fetch(`${BASE_URL}/books/${id}/change-visibility`, {
       method: "PUT",
@@ -278,9 +291,3 @@ export const BooksApi = {
     return res.json();
   },
 }
-
-
-
-
-
-
