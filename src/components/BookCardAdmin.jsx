@@ -1,17 +1,20 @@
 import { useState } from "react";
+// Импортируем функции-запросы
 import { BooksApi } from '../services/useBooksApi';
 
 export default function BookCardAdmin ({ id, title, author, description, isPublic, deleteBook, onBookUpdated }) {
     const formId = id;
     const [isEdit, setEdit] = useState(false);
     const [isAvailable, setIsAvailable] = useState(isPublic);
-
+    
+    // Хранилище данных из формы
     const [formData, setFormData] = useState({
         title,
         author,
         description
     });
 
+    // Изменение видимости книги
     const toggleStatus = async () => {
         try {
             await BooksApi.changeBookAdmin(id, isEdit)
@@ -21,10 +24,12 @@ export default function BookCardAdmin ({ id, title, author, description, isPubli
         }
     };
 
+    // Функции-обработчики изменений в полях и сохранении в хранилище
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
+    // Отправка формы и запрос на сервер
     const saveChanges = async () => {
         try {
             await BooksApi.ChangeBookUser(id, formData.title, formData.description, formData.author);
@@ -42,6 +47,7 @@ export default function BookCardAdmin ({ id, title, author, description, isPubli
         }
     };
 
+    // Выйти из режима редактирования
     const cancelEdit = () => {
         setFormData({ title, author, description });
         setEdit(false);

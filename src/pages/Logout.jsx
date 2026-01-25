@@ -7,13 +7,16 @@ export default function Logout () {
     const navigate = useNavigate();
     const { role } = useUserStore();
 
+    // Проверка на роль пользователя
     useEffect(() => {
         if (role !== 'admin' && role !== 'user') {
             navigate('/denied');
         }
     }, [role, navigate]);
 
+    // Запрос на выход из профиля
     useEffect(() => {
+        // Проверка на роль пользователя
         if (role !== 'admin' && role !== 'user') {
             return;
         }

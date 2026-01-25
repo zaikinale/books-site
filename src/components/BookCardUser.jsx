@@ -1,4 +1,5 @@
 import { useState } from "react";
+// Импортируем функции запросов
 import { BooksApi } from '../services/useBooksApi';
 
 export default function BookCardUser({ id, title, author, description, deleteBook, onBookUpdated }) {
@@ -10,10 +11,12 @@ export default function BookCardUser({ id, title, author, description, deleteBoo
         description
     });
 
+    // Функции-обработчики изменений в полях и сохранении в хранилище
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
+    // Отправка формы и запрос на сервер
     const saveChanges = async () => {
         try {
             await BooksApi.ChangeBookUser(id, formData.title, formData.description, formData.author);
@@ -31,6 +34,7 @@ export default function BookCardUser({ id, title, author, description, deleteBoo
         }
     };
 
+    // Выйти из режима редактирования
     const cancelEdit = () => {
         setFormData({ title, author, description });
         setEdit(false);

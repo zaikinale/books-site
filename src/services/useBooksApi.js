@@ -15,14 +15,6 @@ const getBaseHead = () => {
   }
 }
 
-// const getAuthHeadFile = () => {
-//   const token = localStorage.getItem('token');
-//   return {
-//     'Content-Type': 'multipart/form-data',
-//     'Authorization': `Bearer ${token}`
-//   }
-// }
-
 export const BooksApi = {
 
   // Функция получения всех книг
@@ -97,22 +89,7 @@ export const BooksApi = {
     return res.json();
   },
 
-  // Получить/добавить книгу авторизованного пользователя
-
-  // uploadBook: async (formData) => {
-  //   const res = await fetch(`${BASE_URL}/books/upload`, {
-  //     method: "POST",
-  //     headers: getAuthHeadFile(),
-  //     body: JSON.stringify(formData)
-  //   })
-
-  //   if (!res.ok) {
-  //     const error = await res.json();
-  //     throw new Error("Upload books failed: ", error);
-  //   }
-
-  //   return res.json();
-  // },
+  // --------------------------------- Получить/добавить книгу авторизованного пользователя ---------------------------------
 
   // Функция публикации книги пользователя
   uploadBook: async (formData) => {
@@ -258,7 +235,7 @@ export const BooksApi = {
     return res.json();
   },
 
-  // Администратор
+  // --------------------------------- Администратор ---------------------------------
 
   // Функция получения книг администратора
   getBooksAdmin: async () => {

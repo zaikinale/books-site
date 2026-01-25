@@ -1,14 +1,20 @@
 import { useState } from "react";
-import { AuthApi } from '../services/useAuthApi'
-import { validateEmail, validatePassword } from "../utils/validate";
 import { useNavigate } from "react-router-dom";
+// Импортируем функции-запросы
+import { AuthApi } from '../services/useAuthApi'
+// Импортируем функции валидации
+import { validateEmail, validatePassword } from "../utils/validate";
 import { useUserStore } from '../store/ProfileStore'
 
 export default function LoginForm() {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({ email: '', password: '' });
-    const [errors, setErrors] = useState({});
 
+    // Хранилище ошибок 
+    const [errors, setErrors] = useState({});
+    // Хранилище данных из формы
+    const [formData, setFormData] = useState({ email: '', password: '' });
+
+    // Функции-обработчики изменений в полях и сохранении в хранилище
     async function handleChange (e) {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -21,6 +27,7 @@ export default function LoginForm() {
         }
     };
 
+    // Отправка формы и запрос на сервер
     async function handleSubmit (e) {
         e.preventDefault();
 
@@ -33,11 +40,9 @@ export default function LoginForm() {
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-            // console.log('Ошибка валидации данных:', newErrors);
             return;
         }
 
-        // console.log('Отправленные данные:', formData);
         const resp = await AuthApi.login(formData.email, formData.password)
         if (resp.data.code < 300 && resp.data.code > 199) {
             localStorage.setItem('token', resp.data.token)

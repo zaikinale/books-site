@@ -8,12 +8,13 @@ import {
     validatePassword,
     validateConfirmPassword
 } from "../utils/validate";
-// Импортируем функции запросов
+// Импортируем функции-запросы
 import { AuthApi } from "../services/useAuthApi";
 
 export default function RegistrationForm() {
     const navigate = useNavigate();
 
+    
     const [errors, setErrors] = useState({});
     // Хранилище данных из формы
     const [formData, setFormData] = useState({
@@ -26,6 +27,7 @@ export default function RegistrationForm() {
         agree: false
     });
 
+    // Функции-обработчики изменений в полях и сохранении в хранилище
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         const newValue = type === 'checkbox' ? checked : value;
@@ -47,6 +49,7 @@ export default function RegistrationForm() {
         }
     };
 
+    // Отправка формы и запрос на сервер
     const handleSubmit = async (e) => {
         e.preventDefault();
 

@@ -1,34 +1,38 @@
 import { useEffect, useState } from "react";
-import BookCard from "../components/BookCard"
-import { BooksApi } from "../services/useBooksApi"
 import { useNavigate } from "react-router-dom";
+// Импорт компонентов
+import BookCard from "../components/BookCard"
+// Импорт функций-запросов
+import { BooksApi } from "../services/useBooksApi"
 
 export default function Catalog () {
   const navigate = useNavigate();
+  // Хранилище книг
   const [books, setBooks] = useState([]);
 
+  // Навигация на чтение книги
   const linkPath = (id) => {
     navigate(`/read/${id}`)
   }
 
-    useEffect(() => {
-        const fetchUserBooks = async () => {
-            try {
-                const resp = await BooksApi.getBooksAdmin();
-                if (resp.data?.code >= 200 && resp.data?.code < 300) {
-                  setBooks(resp.data.books || []);
-                } else {
-                    console.error('Ошибка загрузки книг администратора:', resp.message);
-                    setBooks([]);
-                }
-            } catch (error) {
-                console.error('Сетевая ошибка:', error);
-                setBooks([]);
-            }
-        };
-  
-        fetchUserBooks();
-    }, []);
+  // Получение книг
+  useEffect(() => {
+    const fetchUserBooks = async () => {
+      try {
+        const resp = await BooksApi.getBooksAdmin();
+        if (resp.data?.code >= 200 && resp.data?.code < 300) {
+          setBooks(resp.data.books || []);
+        } else {
+          console.error('Ошибка загрузки книг администратора:', resp.message);
+          setBooks([]);
+        }
+      } catch (error) {
+        console.error('Сетевая ошибка:', error);
+        setBooks([]);
+      }
+    };
+    fetchUserBooks();
+  }, []);
 
   return (
     <div className="container mt-5">
