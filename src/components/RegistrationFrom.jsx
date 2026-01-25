@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// Импортируем функции валидации
 import {
     validateName,
     validateAge,
@@ -7,12 +8,14 @@ import {
     validatePassword,
     validateConfirmPassword
 } from "../utils/validate";
+// Импортируем функции запросов
 import { AuthApi } from "../services/useAuthApi";
 
 export default function RegistrationForm() {
     const navigate = useNavigate();
 
     const [errors, setErrors] = useState({});
+    // Хранилище данных из формы
     const [formData, setFormData] = useState({
         name: '',
         email: '',

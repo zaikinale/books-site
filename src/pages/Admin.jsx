@@ -7,14 +7,17 @@ import { useNavigate } from "react-router-dom";
 export default function Admin () {
   const navigate = useNavigate();
   const { role } = useUserStore();
+  // Хранилище книг
   const [adminBooks, setAdminBooks] = useState([]);
 
+  // Проверка на роль пользователя
   useEffect(() => {
       if (role !== 'admin') {
           navigate('/denied');
       }
   }, [role, navigate]);
 
+  // Запрос на получение книг и еще одна проверка роли
   useEffect(() => {
       if (role !== 'admin') {
         return;
@@ -38,6 +41,7 @@ export default function Admin () {
       fetchUserBooks();
   }, [role]);
 
+  // Функция удаления книги
   async function deleteBook(bookId) {
       try {
           await BooksApi.deleteBookUser(bookId);
@@ -47,12 +51,15 @@ export default function Admin () {
       }
   }
   
+  // Функция изменения книги
   async function handleBookUpdated(bookId, updatedBook) {
     setAdminBooks(prev =>
       prev.map(book => (book.id === bookId ? updatedBook : book))
     );
   }
 
+
+  // Проверка на роль
   if (role !== 'admin') {
       return null;
   }

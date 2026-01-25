@@ -1,5 +1,4 @@
 export default function BookCard ({ id, title, author, description, link}) {
-
     return (
         <div className="card book-card">
             <div className="card-body">

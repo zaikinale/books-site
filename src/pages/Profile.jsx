@@ -1,24 +1,32 @@
 import { useState, useRef, useEffect } from "react";
-import BookCardUser from "../components/BookCardUser";
-import { useUserStore } from '../store/ProfileStore';
-import { BooksApi } from "../services/useBooksApi";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from '../store/ProfileStore';
+// Импорт компонентов
+import BookCardUser from "../components/BookCardUser";
+// Импорт функций-запросов
+import { BooksApi } from "../services/useBooksApi";
 
 export default function Profile() {
     const navigate = useNavigate();
     const { name, email, role } = useUserStore();
+    // Хранилище форм книг
     const [bookForms, setBookForms] = useState([]);
+    // Хранилище книг
     const [userBooks, setUserBooks] = useState([]);
 
+    // Переменная для ID книг
     const nextIdRef = useRef(1);
 
+    // Проверка на роль пользователя
     useEffect(() => {
         if (role !== 'admin' && role !== 'user') {
             navigate('/denied');
         }
     }, [role, navigate]);
 
+    // Запрос на получение книг
     useEffect(() => {
+        // Проверка роли
         if (role !== 'admin' && role !== 'user') {
             return;
         }
@@ -41,6 +49,7 @@ export default function Profile() {
         fetchUserBooks();
     }, [role]);
 
+    // Функция удаления книги
     async function deleteBook(bookId) {
         try {
             await BooksApi.deleteBookUser(bookId);
@@ -50,34 +59,40 @@ export default function Profile() {
         }
     }
     
+    // Функция редактирование книги и сохранение в хранилище
     async function handleBookUpdated(bookId, updatedBook) {
         setUserBooks(prev =>
             prev.map(book => (book.id === bookId ? updatedBook : book))
         );
     }
 
+    // Функция добавление форм для создания книг
     function addBookForm() {
         const newId = nextIdRef.current++;
         const newBook = { id: newId, title: '', author: '', description: '', file: null };
         setBookForms(prev => [...prev, newBook]);
     }
 
+    // Функция удаления форм для создания книг
     const removeBookForm = (idToRemove) => {
         setBookForms(prev => prev.filter(book => book.id !== idToRemove));
     };
 
+    // Функция-обработчик изменения полей в книге и сохранение в храшилище
     const handleInputChange = (id, field, value) => {
         setBookForms(prev =>
             prev.map(book => (book.id === id ? { ...book, [field]: value } : book))
         );
     };
 
+    // Функция-обработчик изменения файла в книге и сохранение в храшилище
     const handleFileChange = (id, file) => {
         setBookForms(prev =>
             prev.map(book => (book.id === id ? { ...book, file } : book))
         );
     };
 
+    // Функция выгрузки всех новых книг  
     const uploadBooks = async () => {
         try {
             const uploadPromises = bookForms.map(async (book) => {
@@ -106,6 +121,7 @@ export default function Profile() {
         }
     };
 
+    // Проверка роли
     if (role !== 'admin' && role !== 'user') {
         return null;
     }
